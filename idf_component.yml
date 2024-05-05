@@ -1,0 +1,10 @@
+version: "1.0.5"
+description: Wifi component for ESP-IDF to handle common wifi tasks 
+url: https://github.com/flyinggorilla/wifi.git
+dependencies:
+  idf:
+    version: ">=5.2.0"
+  espstring:
+    version: ">=1.0.5"
+    git: "https://github.com/flyinggorilla/espstring.git"
+
