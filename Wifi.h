@@ -26,7 +26,7 @@ public:
 	void StartSTAModeEnterprise(String &rsSsid, String &rsUser, String &rsPass, String &rsCA, String &rsHostname);
 	void StartAPSTAMode(String &rsApSsid, String &rsApPass, String &rsApHostname);
 	void StartAPSTAMode(String &rsApSsid, String &rsApPass, String &rsApHostname, String &rsSsid, String &rsUser, String &rsPass);
-	void StartTimeSync(String &rsNtpServer, unsigned short syncIntervalMinutes);
+	void StartTimeSync(String &rsNtpServer, unsigned short syncIntervalMinutes = 60);
 
 	void addDNSServer(String &ip);
 	void setIPInfo(String &ip, String &gw, String &netmask);
