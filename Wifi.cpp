@@ -511,12 +511,27 @@ void Wifi::OnEvent(esp_event_base_t base, int32_t id, void *event_data)
 	}
 }
 
-void Wifi::StartTimeSync(String &rsNtpServer)
+void Wifi::SntpCallback(struct timeval *tv) {
+	time_t now;
+	char strftime_buf[64];
+	struct tm timeinfo;
+	time(&now);
+	localtime_r(&now, &timeinfo);
+	strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+	ESP_LOGI(tag, "SNTP updated time to: %s", strftime_buf);
+};
+
+
+void Wifi::StartTimeSync(String &rsNtpServer, unsigned short syncIntervalMinutes)
 {
 	esp_sntp_setoperatingmode(SNTP_OPMODE_POLL);
-	esp_sntp_set_sync_mode(SNTP_SYNC_MODE_IMMED);
-	esp_sntp_setservername(0, rsNtpServer.c_str());
 	esp_sntp_init();
+	esp_sntp_set_sync_mode(SNTP_SYNC_MODE_SMOOTH);
+	msNtpServer = rsNtpServer;
+	esp_sntp_setservername(0, msNtpServer.c_str());
+	esp_sntp_set_sync_interval(syncIntervalMinutes*60*1000); 
+	esp_sntp_set_time_sync_notification_cb(Wifi::SntpCallback);
+	ESP_LOGI(tag, "Starting syncing with NTP Server to: %s every %lu minutes", msNtpServer.c_str(), esp_sntp_get_sync_interval() / 60000);
 }
 
 void Wifi::EnableEspNow(uint8_t channel)

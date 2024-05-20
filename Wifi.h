@@ -12,6 +12,7 @@ public:
 	Wifi();
 
 	static Wifi wifi;
+	static void SntpCallback(struct timeval *tv);
 
 	/// @brief must be called before the Start* methods
 	/// @param channel 
@@ -25,7 +26,7 @@ public:
 	void StartSTAModeEnterprise(String &rsSsid, String &rsUser, String &rsPass, String &rsCA, String &rsHostname);
 	void StartAPSTAMode(String &rsApSsid, String &rsApPass, String &rsApHostname);
 	void StartAPSTAMode(String &rsApSsid, String &rsApPass, String &rsApHostname, String &rsSsid, String &rsUser, String &rsPass);
-	void StartTimeSync(String &rsNtpServer);
+	void StartTimeSync(String &rsNtpServer, unsigned short syncIntervalMinutes);
 
 	void addDNSServer(String &ip);
 	void setIPInfo(String &ip, String &gw, String &netmask);
@@ -65,6 +66,7 @@ private:
 	String msApPass;
 	String msCA;
 	String msHostname;
+	String msNtpServer; // a copy of this string must be in memory for esp_ntp to work
 
 	typedef struct {
 		String msSsid;
